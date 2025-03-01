@@ -1,4 +1,4 @@
-from optim import HttpGetOptimizer
+from optimizer.optim import HttpGetOptimizer
 import asyncio
 from loguru import logger
 
