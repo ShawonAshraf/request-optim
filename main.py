@@ -11,6 +11,8 @@ async def main():
     test_url = "https://httpbin.org/get"
     
     # TODO: add argparse to take the number of requests as cmd args
+    # TODO: add different endpoints
+    # TODO: yes also add unit tests
     # Launch multiple requests concurrently.
     # If duplicate calls are made, they share the same in-flight request.
     results = await asyncio.gather(
