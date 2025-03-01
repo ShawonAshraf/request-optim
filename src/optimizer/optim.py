@@ -2,6 +2,7 @@ import aiohttp
 import asyncio
 from urllib.parse import urlparse
 from loguru import logger
+import re
 
 
 class RequestOptimizer:
@@ -12,16 +13,38 @@ class RequestOptimizer:
         self.endpoint_semaphores = {}
         # a single aiohttp session for all requests.
         self.session = aiohttp.ClientSession()
+        
+    def is_url_valid(self, url: str) -> bool:
+        URL_REGEX = re.compile(
+            r'^(?:http)s?://'            # http:// or https://
+            r'(?:\S+(?::\S*)?@)?'
+            r'(?:'
+            r'(?P<ip>(?:\d{1,3}\.){3}\d{1,3})'  # IP address
+            r'|'
+            r'(?P<host>[A-Za-z0-9.-]+)'       # domain...
+            r')'
+            r'(?::\d+)?'                    # optional port
+            r'(?:[/?#][^\s]*)?$',            # path, query string, fragment
+            re.IGNORECASE
+        )
+        
+        return re.match(URL_REGEX, url) is not None
+        
 
     def get_endpoint(self, url: str) -> str:
         """
         Extracts the endpoint (host and port) from the URL.
         If no port is specified, uses 443 for HTTPS and 80 for HTTP.
+        Throws a ValueError if the URL is not valid.
         """
-        parsed = urlparse(url)
-        host = parsed.hostname
-        port = parsed.port or (443 if parsed.scheme == "https" else 80)
-        return f"{host}:{port}"
+        if self.is_url_valid(url):
+            parsed = urlparse(url)
+            host = parsed.hostname
+            port = parsed.port or (443 if parsed.scheme == "https" else 80)
+            return f"{host}:{port}"
+        else:
+            raise ValueError(f"Invalid URL: {url}")
+
 
     async def get(self, url: str) -> str:
         """

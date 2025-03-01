@@ -40,3 +40,8 @@ async def test_session_closing(optimizer):
         pass
     
     assert optimizer.session.closed, "The session must be closed after exiting the context"
+
+
+def test_is_url_valid(optimizer):
+    assert optimizer.is_url_valid("https://abc.xyz")
+    assert not optimizer.is_url_valid("abc"), "Should be false for an invalid url"
