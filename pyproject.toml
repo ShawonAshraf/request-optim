@@ -17,3 +17,6 @@ dev = [
 
 [tool.uv]
 package = true
+
+[project.scripts]
+main = "main:main"
