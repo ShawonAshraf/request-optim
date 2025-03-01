@@ -16,7 +16,7 @@ async def main():
     # TODO: yes also add unit tests
     
     results = await asyncio.gather(*(optimizer.get(tu) for tu in test_urls))
-    logger.info(len(results))
+    logger.info(f"Processed {len(results)} requests.")
     
 
     
