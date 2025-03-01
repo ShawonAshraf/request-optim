@@ -8,17 +8,14 @@ from optimizer.optim import RequestOptimizer
 # Example usage:
 async def run_optimizer():
     optimizer = RequestOptimizer()
+    N_REQS = 5
 
-    url_root = "https://httpbin.org/get"
-    # create 50 requests
-    test_urls = [url_root + f"?{i}" for i in range(50)]
-
-    # TODO: add argparse to take the number of requests as cmd args
-    # TODO: add different endpoints
-    # TODO: yes also add unit tests
+    urls = ["https://httpbin.org/get"] * N_REQS + \
+        ["https://httpbin.org/status/404"] * N_REQS + \
+        ["https://httpbin.org/ip"] * N_REQS
 
     async with optimizer:
-        results = await asyncio.gather(*(optimizer.get(tu) for tu in test_urls))
+        results = await asyncio.gather(*(optimizer.get(url) for url in urls))
         logger.info(f"Processed {len(results)} requests.")
 
 
