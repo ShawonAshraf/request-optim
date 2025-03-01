@@ -1,4 +1,3 @@
-import json
 from optim import HttpGetOptimizer
 import asyncio
 from loguru import logger
@@ -8,21 +7,18 @@ from loguru import logger
 async def main():
     optimizer = HttpGetOptimizer()
     
-    test_url = "https://httpbin.org/get"
+    url_root = "https://httpbin.org/get"
+    # create 50 requests
+    test_urls = [url_root + f"?{i}" for i in range(50)]
     
     # TODO: add argparse to take the number of requests as cmd args
     # TODO: add different endpoints
     # TODO: yes also add unit tests
-    # Launch multiple requests concurrently.
-    # If duplicate calls are made, they share the same in-flight request.
-    results = await asyncio.gather(
-        optimizer.get(test_url),
-        optimizer.get(test_url),
-        optimizer.get(test_url)
-    )
     
-    results_json = list(map(lambda r: json.loads(r), results))
-    logger.info(results_json)
+    results = await asyncio.gather(*(optimizer.get(tu) for tu in test_urls))
+    logger.info(len(results))
+    
+
     
     await optimizer.close()
 

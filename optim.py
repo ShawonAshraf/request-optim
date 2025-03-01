@@ -49,7 +49,13 @@ class HttpGetOptimizer:
         semaphore = self.endpoint_semaphores[endpoint]
 
         try:
+            # if there are more than 3 concurrent requests, it gets locked
+            # until 3 requests have been resolved
+            logger.info(
+                f"Task waiting to acquire semaphore for endpoint: {endpoint}")
             async with semaphore:
+                logger.info(
+                    f"Task acquired semaphore for endpoint: {endpoint}")
                 async with self.session.get(url) as response:
                     # Assuming text response
                     data = await response.text()
