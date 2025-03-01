@@ -15,10 +15,9 @@ async def run_optimizer():
     # TODO: add different endpoints
     # TODO: yes also add unit tests
 
-    results = await asyncio.gather(*(optimizer.get(tu) for tu in test_urls))
-    logger.info(f"Processed {len(results)} requests.")
-
-    await optimizer.close()
+    async with optimizer:
+        results = await asyncio.gather(*(optimizer.get(tu) for tu in test_urls))
+        logger.info(f"Processed {len(results)} requests.")
 
 
 def main():

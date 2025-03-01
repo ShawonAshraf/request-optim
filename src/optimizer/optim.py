@@ -69,7 +69,12 @@ class HttpGetOptimizer:
             self.in_flight_requests.pop(url, None)
             logger.info(f"Task released semaphore for endpoint: {endpoint}")
 
+    
+    # https://stackoverflow.com/a/54773296
+    async def __aenter__(self):
+        return self
 
-    async def close(self):
-        """Closes the aiohttp session."""
+    async def __aexit__(self, *excinfo):
+        # close the session at the end
         await self.session.close()
+        logger.info("Session closed.")
