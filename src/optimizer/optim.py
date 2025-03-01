@@ -6,11 +6,11 @@ from loguru import logger
 
 class RequestOptimizer:
     def __init__(self):
-        # Map to store ongoing requests for deduplication: URL -> Future
+        # map to store ongoing requests for deduplication: URL -> Future
         self.in_flight_requests = {}
-        # Map to store endpoint semaphores: "host:port" -> asyncio.Semaphore
+        # map to store endpoint semaphores: "host:port" -> asyncio.Semaphore
         self.endpoint_semaphores = {}
-        # Create a single aiohttp session for all requests.
+        # a single aiohttp session for all requests.
         self.session = aiohttp.ClientSession()
 
     def get_endpoint(self, url: str) -> str:
@@ -31,17 +31,17 @@ class RequestOptimizer:
         - Uses the entire URL string as the identifier for a request.
         Returns the response body as a string.
         """
-        # Deduplication: if a request for this URL is already in flight, wait for its result.
+        # deduplication: if a request for this URL is already in flight, wait for its result.
         if url in self.in_flight_requests:
             logger.info(f"Request : {url} :: is already in flight!")
             return await self.in_flight_requests[url]
 
-        # Create a future to represent this request and store it.
+        # a future to represent this request and store it.
         loop = asyncio.get_event_loop()
         future = loop.create_future()
         self.in_flight_requests[url] = future
 
-        # Determine the endpoint and get/create a semaphore for it.
+        # determine the endpoint and get/create a semaphore for it.
         endpoint = self.get_endpoint(url)
         if endpoint not in self.endpoint_semaphores:
             logger.info(f"Creating semaphore for - {endpoint}")
@@ -65,7 +65,7 @@ class RequestOptimizer:
             future.set_exception(e)
             raise
         finally:
-            # Once complete (whether successful or not), remove the entry for deduplication.
+            # once complete (whether successful or not), remove the entry for deduplication.
             self.in_flight_requests.pop(url, None)
             logger.info(f"Task released semaphore for endpoint: {endpoint}")
 
