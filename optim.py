@@ -28,11 +28,12 @@ class HttpGetOptimizer:
         Performs an HTTP GET request to the given URL with optimizations:
         - Deduplicates concurrent requests for the same URL.
         - Limits concurrent requests per endpoint to 3.
+        - Uses the entire URL string as the identifier for a request.
         Returns the response body as a string.
         """
         # Deduplication: if a request for this URL is already in flight, wait for its result.
         if url in self.in_flight_requests:
-            logger.info(f"{url} is already in flight!")
+            logger.info(f"Request : {url} :: is already in flight!")
             return await self.in_flight_requests[url]
 
         # Create a future to represent this request and store it.
@@ -42,8 +43,8 @@ class HttpGetOptimizer:
 
         # Determine the endpoint and get/create a semaphore for it.
         endpoint = self.get_endpoint(url)
-        logger.info(f"{endpoint=}")
         if endpoint not in self.endpoint_semaphores:
+            logger.info(f"Creating semaphore for - {endpoint}")
             self.endpoint_semaphores[endpoint] = asyncio.Semaphore(3)
         semaphore = self.endpoint_semaphores[endpoint]
 
