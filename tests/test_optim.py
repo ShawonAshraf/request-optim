@@ -1,12 +1,12 @@
 import pytest
 import pytest_asyncio
-from optimizer.optim import HttpGetOptimizer
+from optimizer.optim import RequestOptimizer
 import asyncio
 
 
 @pytest_asyncio.fixture
 async def optimizer():
-    return HttpGetOptimizer()
+    return RequestOptimizer()
 
 
 def test_get_endpoint(optimizer):

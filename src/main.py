@@ -1,11 +1,13 @@
-from optimizer.optim import HttpGetOptimizer
 import asyncio
+
 from loguru import logger
+
+from optimizer.optim import RequestOptimizer
 
 
 # Example usage:
 async def run_optimizer():
-    optimizer = HttpGetOptimizer()
+    optimizer = RequestOptimizer()
 
     url_root = "https://httpbin.org/get"
     # create 50 requests

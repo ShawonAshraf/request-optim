@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 from loguru import logger
 
 
-class HttpGetOptimizer:
+class RequestOptimizer:
     def __init__(self):
         # Map to store ongoing requests for deduplication: URL -> Future
         self.in_flight_requests = {}
