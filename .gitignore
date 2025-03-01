@@ -6,9 +6,13 @@ dist/
 wheels/
 *.egg-info
 .mypy_cache/
+.pytest_cache/
 
 # Virtual environments
 .venv
 
 # qodo directory
 .qodo/
+
+# vs code
+.vscode/
