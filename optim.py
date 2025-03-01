@@ -67,6 +67,8 @@ class HttpGetOptimizer:
         finally:
             # Once complete (whether successful or not), remove the entry for deduplication.
             self.in_flight_requests.pop(url, None)
+            logger.info(f"Task released semaphore for endpoint: {endpoint}")
+
 
     async def close(self):
         """Closes the aiohttp session."""
