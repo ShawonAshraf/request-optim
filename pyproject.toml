@@ -19,4 +19,4 @@ dev = [
 package = true
 
 [project.scripts]
-main = "main:main"
+demo = "demo:main"
