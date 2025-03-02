@@ -20,6 +20,3 @@ package = true
 
 [project.scripts]
 demo = "demo:main"
-
-[tool.setuptools.packages.find]
-where = []
