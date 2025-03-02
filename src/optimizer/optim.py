@@ -13,6 +13,8 @@ class RequestOptimizer:
         self.endpoint_semaphores = {}
         # a single aiohttp session for all requests.
         self.session = aiohttp.ClientSession()
+        # max 3 concurrent requests per endpoint
+        self.MAX_CON = 3
         
     def is_url_valid(self, url: str) -> bool:
         URL_REGEX = re.compile(
@@ -50,7 +52,7 @@ class RequestOptimizer:
         """
         Performs an HTTP GET request to the given URL with optimizations:
         - Deduplicates concurrent requests for the same URL.
-        - Limits concurrent requests per endpoint to 3.
+        - Limits concurrent requests per endpoint to MAX_CON.
         - Uses the entire URL string as the identifier for a request.
         Returns the response body as a string.
         """
@@ -65,15 +67,19 @@ class RequestOptimizer:
         self.in_flight_requests[url] = future
 
         # determine the endpoint and get/create a semaphore for it.
-        endpoint = self.get_endpoint(url)
-        if endpoint not in self.endpoint_semaphores:
-            logger.info(f"Creating semaphore for - {endpoint}")
-            self.endpoint_semaphores[endpoint] = asyncio.Semaphore(3)
-        semaphore = self.endpoint_semaphores[endpoint]
+        try:
+            endpoint = self.get_endpoint(url)
+            if endpoint not in self.endpoint_semaphores:
+                logger.info(f"Creating semaphore for - {endpoint}")
+                self.endpoint_semaphores[endpoint] = asyncio.Semaphore(self.MAX_CON)
+            semaphore = self.endpoint_semaphores[endpoint]
+        except ValueError as e:
+            future.set_exception(e)
+
 
         try:
-            # if there are more than 3 concurrent requests, it gets locked
-            # until 3 requests have been resolved
+            # if there are more than MAX_CON concurrent requests, it gets locked
+            # until MAX_CON requests have been resolved
             logger.info(
                 f"Task waiting to acquire semaphore for endpoint: {endpoint}")
             async with semaphore:
@@ -88,7 +94,7 @@ class RequestOptimizer:
             future.set_exception(e)
             raise
         finally:
-            # once complete (whether successful or not), remove the entry for deduplication.
+            # once completed, remove the entry for deduplication.
             self.in_flight_requests.pop(url, None)
             logger.info(f"Task released semaphore for endpoint: {endpoint}")
 
