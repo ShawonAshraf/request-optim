@@ -21,7 +21,7 @@ source .venv/bin/activate
 uv sync
 ```
 
-> [!INFO]
+> [!TIP]
 > You can also use the provided devcontainer configuration.
 > ```bash
 > devcontainer up --workspace-folder .
