@@ -57,7 +57,7 @@ Example output:
     "User-Agent": "Python/3.12 aiohttp/3.11.13", 
     "X-Amzn-Trace-Id": "Root=1-67c3ac17-64847f214e1875477e1ea5e1"
   }, 
-  "origin": "83.236.183.211", 
+  "origin": "*********", 
   "url": "https://httpbin.org/get"
 }
 
