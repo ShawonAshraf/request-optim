@@ -18,9 +18,8 @@ Concurrent requests are sent via python `async` methods and the results are hand
 > Ensure that you've `uv` installed: [link](https://docs.astral.sh/uv/getting-started/installation/). 
 
 ```bash
-uv venv
-source .venv/bin/activate
 uv sync
+source .venv/bin/activate
 ```
 
 > [!TIP]
@@ -28,6 +27,12 @@ uv sync
 > ```bash
 > devcontainer up --workspace-folder .
 > ```
+
+> [!CAUTION]
+> UV doesn't have support to install venvs at custom locations so
+> if you run the devcontainer after creating a local env, they'll conflict
+> due to both venvs trying to exist in the same place. Poetry has a better solution
+> but this project uses uv so anyways.
 
 ## cli
 
