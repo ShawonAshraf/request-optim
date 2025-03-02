@@ -1,5 +1,7 @@
 # request-optim
 
+[![tests](https://github.com/ShawonAshraf/request-optim/actions/workflows/tests.yml/badge.svg)](https://github.com/ShawonAshraf/request-optim/actions/workflows/tests.yml)
+
 A project to demo optimisation of http get requests. There are two parts of the optimisation process:
 
 1. Deduplication: if a request is made multiple times but one of them is already in flight then they're all returned with the results from the inflight request.
