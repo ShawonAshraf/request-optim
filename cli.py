@@ -16,6 +16,8 @@ async def run(n_reqs: int, urls: List[str]):
 
     async with optimizer:
         results = await asyncio.gather(*(optimizer.get(url) for url in urls))
+        
+        logger.info("Results:")
         for idx, result in enumerate(results):
             logger.info(f"\n{idx}::\n{result}")
         logger.info(f"Processed {len(results)} requests.")
@@ -25,5 +27,4 @@ if __name__ == "__main__":
     n = args.n
     urls = args.urls
     
-    print(args)
     asyncio.run(run(n, urls))

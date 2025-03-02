@@ -70,7 +70,7 @@ class RequestOptimizer:
         try:
             endpoint = self.get_endpoint(url)
             if endpoint not in self.endpoint_semaphores:
-                logger.info(f"Creating semaphore for - {endpoint}")
+                logger.debug(f"Creating semaphore for - {endpoint}")
                 self.endpoint_semaphores[endpoint] = asyncio.Semaphore(self.MAX_CON)
             semaphore = self.endpoint_semaphores[endpoint]
         except ValueError as e:
@@ -80,10 +80,10 @@ class RequestOptimizer:
         try:
             # if there are more than MAX_CON concurrent requests, it gets locked
             # until MAX_CON requests have been resolved
-            logger.info(
+            logger.debug(
                 f"Task waiting to acquire semaphore for endpoint: {endpoint}")
             async with semaphore:
-                logger.info(
+                logger.debug(
                     f"Task acquired semaphore for endpoint: {endpoint}")
                 async with self.session.get(url) as response:
                     # return a string for simplicity
@@ -97,7 +97,7 @@ class RequestOptimizer:
         finally:
             # once completed, remove the entry for deduplication.
             self.in_flight_requests.pop(url, None)
-            logger.info(f"Task released semaphore for endpoint: {endpoint}")
+            logger.debug(f"Task released semaphore for endpoint: {endpoint}")
 
     
     # https://stackoverflow.com/a/54773296
