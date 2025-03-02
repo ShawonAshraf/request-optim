@@ -21,6 +21,12 @@ source .venv/bin/activate
 uv sync
 ```
 
+> [!INFO]
+> You can also use the provided devcontainer configuration.
+> ```bash
+> devcontainer up --workspace-folder .
+> ```
+
 ## cli
 
 Run the cli using the following command format
