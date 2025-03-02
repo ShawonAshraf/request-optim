@@ -27,7 +27,7 @@ async def test_get(optimizer):
     url_root = "https://httpbin.org/get"
     # create 15 requests
     N_REQS = 15
-    test_urls = [url_root + f"?{i}" for i in range(N_REQS)]
+    test_urls = [url_root] * N_REQS
     
     
     async with optimizer:
