@@ -86,7 +86,8 @@ class RequestOptimizer:
                 logger.info(
                     f"Task acquired semaphore for endpoint: {endpoint}")
                 async with self.session.get(url) as response:
-                    # Assuming text response
+                    # return a string for simplicity
+                    # ideally there should be handlers based on content type
                     data = await response.text()
                     future.set_result(data)
                     return data
