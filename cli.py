@@ -6,7 +6,7 @@ import argparse
 
 argument_parser = argparse.ArgumentParser()
 argument_parser.add_argument("--n", type=int, required=True, default=1, help="Max number of concurrent requests.")
-argument_parser.add_argument("--url", type=str, required=True, help="URL to send requests to.")
+argument_parser.add_argument("--urls", action="append", required=True, help="URLs to send requests to.")
 args = argument_parser.parse_args()
 
 
@@ -21,7 +21,7 @@ async def run(n_reqs: int, urls: List[str]):
     
 if __name__ == "__main__":
     n = args.n
-    url = args.url
+    urls = args.urls
     
     print(args)
-    asyncio.run(run(n, [url]))
+    asyncio.run(run(n, urls))
