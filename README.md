@@ -29,7 +29,7 @@ source .venv/bin/activate
 > ```
 
 > [!CAUTION]
-> UV doesn't have support to install venvs at custom locations so
+> UV doesn't support installing venvs at custom locations so
 > if you run the devcontainer after creating a local env, they'll conflict
 > due to both venvs trying to exist in the same place. Poetry has a better solution
 > but this project uses uv so anyways.
